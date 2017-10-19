@@ -5,7 +5,7 @@ from contextlib import suppress
 
 from funcy.colls import walk_values, get_in
 from funcy.seqs import take
-from funcy.simple_funcs import rpartial
+from funcy import rpartial
 from steembase.exceptions import AccountDoesNotExistsException
 from toolz import dissoc
 
@@ -226,7 +226,7 @@ class Account(dict):
 
         Args:
             index (int): start index for get_account_history
-            limit (int): end index for get_account_history
+            limit (int): How many items are we interested in.
             start (int): (Optional) skip items until this index
             stop (int): (Optional) stop iteration early at this index
             order: (1, -1): 1 for chronological, -1 for reverse order
