@@ -5,7 +5,7 @@ from contextlib import suppress
 
 from funcy.colls import walk_values, get_in
 from funcy.seqs import take
-from funcy.simple_funcs import rpartial
+from funcy import rpartial
 from steembase.exceptions import AccountDoesNotExistsException
 from toolz import dissoc
 
@@ -59,7 +59,7 @@ class Account(dict):
         with suppress(TypeError):
             return get_in(self, ['json_metadata', 'profile'], default={})
         return {}
-    
+
     @property
     def sp(self):
         vests = Amount(self['vesting_shares']).amount
@@ -75,26 +75,20 @@ class Account(dict):
 
     def get_balances(self):
         available = {
-            'STEEM': Amount(self['balance']).amount,
-            'SBD': Amount(self['sbd_balance']).amount,
-            'VESTS': Amount(self['vesting_shares']).amount,
+            'GOLOS': Amount(self['balance']).amount,
+            'GBG': Amount(self['sbd_balance']).amount,
+            'GESTS': Amount(self['vesting_shares']).amount,
         }
 
         savings = {
-            'STEEM': Amount(self['savings_balance']).amount,
-            'SBD': Amount(self['savings_sbd_balance']).amount,
-        }
-
-        rewards = {
-            'STEEM': Amount(self['reward_steem_balance']).amount,
-            'SBD': Amount(self['reward_sbd_balance']).amount,
-            'VESTS': Amount(self['reward_vesting_balance']).amount,
+            'GOLOS': Amount(self['savings_balance']).amount,
+            'GBG': Amount(self['savings_sbd_balance']).amount,
         }
 
         totals = {
-            'STEEM': sum([available['STEEM'], savings['STEEM'], rewards['STEEM']]),
-            'SBD': sum([available['SBD'], savings['SBD'], rewards['SBD']]),
-            'VESTS': sum([available['VESTS'], rewards['VESTS']]),
+            'GOLOS': sum([available['GOLOS'], savings['GOLOS']]),
+            'GBG': sum([available['GBG'], savings['GBG']]),
+            'GESTS': sum([available['GESTS']]),
         }
 
         total = walk_values(rpartial(round, 3), totals)
@@ -102,7 +96,6 @@ class Account(dict):
         return {
             'available': available,
             'savings': savings,
-            'rewards': rewards,
             'total': total,
         }
 
@@ -233,7 +226,7 @@ class Account(dict):
 
         Args:
             index (int): start index for get_account_history
-            limit (int): end index for get_account_history
+            limit (int): How many items are we interested in.
             start (int): (Optional) skip items until this index
             stop (int): (Optional) stop iteration early at this index
             order: (1, -1): 1 for chronological, -1 for reverse order
