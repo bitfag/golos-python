@@ -5,7 +5,7 @@
 You can install `golos-python` with `pip`:
 
 ```
-pip install -U golos
+pip install -U 'git+https://github.com/GolosChain/golos-python.git#egg=steem'
 ```
 
 ## Documentation
