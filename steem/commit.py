@@ -377,6 +377,7 @@ class Commit(object):
                        store_owner_key=False,
                        delegation_fee_steem='0 GOLOS',
                        creator=None,
+                       create_with_delegation=False,
                        ):
         """ Create new account in Steem
 
@@ -438,6 +439,8 @@ class Commit(object):
                                         without VESTS delegation.
             :param str creator: which account should pay the registration fee
                                 (defaults to ``default_account``)
+            :param bool create_with_delegation: (Optional) If True, a new-style account creation will be used,
+                                                otherwise use AccountCreate op
             :raises AccountExistsException: if the account already exists on the blockchain
 
         """
@@ -543,7 +546,6 @@ class Commit(object):
 
         s = {'creator': creator,
              'fee': '%s GOLOS' % (delegation_fee_steem or required_fee_steem),
-             'delegation': '%s VESTS' % required_fee_vests,
              'json_metadata': json_meta or {},
              'memo_key': memo,
              'new_account_name': account_name,
@@ -558,7 +560,11 @@ class Commit(object):
                          'weight_threshold': 1},
              'prefix': self.steemd.chain_params["prefix"]}
 
-        op = operations.AccountCreateWithDelegation(**s)
+        if create_with_delegation:
+            s['delegation'] = '%s VESTS' % required_fee_vests
+            op = operations.AccountCreateWithDelegation(**s)
+        else:
+            op = operations.AccountCreate(**s)
 
         return self.finalizeOp(op, creator, "active")
 
