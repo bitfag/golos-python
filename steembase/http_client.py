@@ -149,16 +149,22 @@ class HttpClient(object):
         as_json = kwargs.pop('as_json', True)
         _id = kwargs.pop('_id', 0)
 
+        unwanted_keys = ['return_with_args', '_ret_cnt']
+        sanitized_kwargs = dict(kwargs)
+        for key in unwanted_keys:
+            if key in sanitized_kwargs:
+                del sanitized_kwargs[key]
+
         if not api:
 
             raise InvalidAPICallFormat("You need to provide 'api' kwarg")
 
         headers = {"jsonrpc": "2.0", "id": _id}
-        if kwargs is not None and len(kwargs) > 0:
+        if sanitized_kwargs is not None and len(sanitized_kwargs) > 0:
 
             body_dict = dict(headers)
             body_dict.update({"method": "call",
-                              "params": [api, name, kwargs]})
+                              "params": [api, name, sanitized_kwargs]})
         else:
 
             body_dict = dict(headers)
