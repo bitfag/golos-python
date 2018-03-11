@@ -115,3 +115,10 @@ class PostDoesNotExist(Exception):
 
 class VotingInvalidOnArchivedPost(Exception):
     pass
+
+class InvalidAPICallFormat(Exception):
+    """ This is an exception should be raised when calling a steemd instance without API
+        API changed in golos 0.16.5 / 0.17.0
+        See https://docs.google.com/document/d/1mauB7xVuyu8XtmzYKGGWaWC5hIdd9BCps0EqznLjepI/edit#
+    """
+    pass

@@ -10,6 +10,7 @@ import concurrent.futures
 import certifi
 import urllib3
 from steembase.exceptions import RPCError
+from steembase.exceptions import InvalidAPICallFormat
 from urllib3.connection import HTTPConnection
 from urllib3.exceptions import MaxRetryError, ReadTimeoutError, ProtocolError
 
@@ -148,22 +149,21 @@ class HttpClient(object):
         as_json = kwargs.pop('as_json', True)
         _id = kwargs.pop('_id', 0)
 
+        if not api:
+
+            raise InvalidAPICallFormat("You need to provide 'api' kwarg")
+
         headers = {"jsonrpc": "2.0", "id": _id}
         if kwargs is not None and len(kwargs) > 0:
 
             body_dict = dict(headers)
             body_dict.update({"method": "call",
                               "params": [api, name, kwargs]})
-        elif api:
+        else:
 
             body_dict = dict(headers)
             body_dict.update({"method": "call",
                               "params": [api, name, args]})
-
-        else:
-
-            body_dict = dict(headers)
-            body_dict.update({"method": name, "params": args})
 
         if as_json:
             return json.dumps(body_dict, ensure_ascii=False).encode('utf8')
@@ -218,9 +218,10 @@ class HttpClient(object):
                           (self.hostname, e.__class__.__name__))
             return self.call(
                 name,
+                *args,
+                api=api,
                 return_with_args=return_with_args,
-                _ret_cnt=_ret_cnt + 1,
-                *args)
+                _ret_cnt=_ret_cnt + 1)
         except Exception as e:
             if self.re_raise:
                 raise e
