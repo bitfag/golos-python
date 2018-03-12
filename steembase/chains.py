@@ -13,7 +13,7 @@ known_chains = {
         "prefix": "GLS",
         "steem_symbol": "GOLOS",
         "sbd_symbol": "GBG",
-        "vests_symbol": "VESTS",
+        "vests_symbol": "GESTS",
     },    
     "TEST": {
         "chain_id":
