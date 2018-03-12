@@ -56,7 +56,7 @@ class Steemd(HttpClient):
 
     def __init__(self, nodes=None, **kwargs):
         if not nodes:
-            nodes = get_config_node_list() or ['https://api.steemit.com']
+            nodes = get_config_node_list() or ['https://ws.golos.io']
 
         super(Steemd, self).__init__(nodes, **kwargs)
 
