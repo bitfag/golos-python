@@ -2,6 +2,12 @@
 `golos-python` is the official Golos library for Python. It comes with a BIP38
 encrypted wallet and a practical CLI utility called `golospy`.
 
+# Compatibility
+
+This library version is compatible only with golosd versions 0.16.5 and above.
+
+**For golosd 0.16.4 use [piston-lib](https://github.com/bitfag/piston-lib/tree/golos-fixes) instead.**
+
 ## Installation with pipenv (recommended)
 
 Install pipenv first if you don't have it:
